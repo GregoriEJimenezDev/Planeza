@@ -1,0 +1,19 @@
+"""Constantes globales del sistema Planexa."""
+
+CONTENT_WIDTH = 80
+TERMINAL_FALLBACK = (100, 30)
+DATE_FORMAT = "%Y-%m-%d"
+DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
+SYSTEM_NAME = "Planexa"
+FOOTER_TEXT = "Fin del reporte - Planexa"
+
+KIND_OK = "OK"
+KIND_ERROR = "ERROR"
+KIND_WARN = "WARN"
+KIND_INFO = "INFO"
+MESSAGE_PREFIXES = {
+    KIND_OK: "[OK]",
+    KIND_ERROR: "[ERROR]",
+    KIND_WARN: "[AVISO]",
+    KIND_INFO: "[INFO]",
+}
