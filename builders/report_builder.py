@@ -1,13 +1,65 @@
-"""Builder de reportes con plantilla estandar unica."""
-
 from __future__ import annotations
 
-from config.settings import CONTENT_WIDTH, FOOTER_TEXT, SYSTEM_NAME
+from abc import ABC, abstractmethod
+from datetime import datetime
+
+from config.settings import (
+    CONTENT_WIDTH,
+    DATETIME_FORMAT,
+    FOOTER_TEXT,
+    SYSTEM_NAME,
+    TOTALS_LABEL,
+)
 
 
-class ReportBuilder:
-    """Construye reportes paso a paso con plantilla estandar."""
+class AbstractReportBuilder(ABC):
+    # Complejidad: O(1)
+    @abstractmethod
+    def header(self, title: str, identifier: str) -> AbstractReportBuilder:
+        ...
 
+    # Complejidad: O(1)
+    @abstractmethod
+    def metadata(self, label: str, value: object) -> AbstractReportBuilder:
+        ...
+
+    # Complejidad: O(1)
+    @abstractmethod
+    def table(self, columns: list[tuple[str, int, str]]) -> AbstractReportBuilder:
+        ...
+
+    # Complejidad: O(1)
+    @abstractmethod
+    def row(self, values: list[object]) -> AbstractReportBuilder:
+        ...
+
+    # Complejidad: O(1)
+    @abstractmethod
+    def pair(self, label: str, value: object) -> AbstractReportBuilder:
+        ...
+
+    # Complejidad: O(1)
+    @abstractmethod
+    def note(self, text: str) -> AbstractReportBuilder:
+        ...
+
+    # Complejidad: O(1)
+    @abstractmethod
+    def total_records(self, count: int) -> AbstractReportBuilder:
+        ...
+
+    # Complejidad: O(1)
+    @abstractmethod
+    def footer(self, text: str) -> AbstractReportBuilder:
+        ...
+
+    # Complejidad: O(n)
+    @abstractmethod
+    def build(self) -> list[str]:
+        ...
+
+
+class ReportBuilder(AbstractReportBuilder):
     # Complejidad: O(1)
     def __init__(self, width: int = CONTENT_WIDTH) -> None:
         self._width = width
@@ -53,8 +105,8 @@ class ReportBuilder:
         return self
 
     # Complejidad: O(1)
-    def totals(self, text: str) -> ReportBuilder:
-        self._totals = text
+    def total_records(self, count: int) -> ReportBuilder:
+        self._totals = f"{TOTALS_LABEL}: {count}"
         return self
 
     # Complejidad: O(1)
@@ -112,3 +164,15 @@ class ReportBuilder:
         lines.append(self._center(self._footer))
         lines.append("=" * self._width)
         return lines
+
+
+class ReportBuilderFactory:
+    # Complejidad: O(1)
+    def __init__(self, width: int = CONTENT_WIDTH) -> None:
+        self._width = width
+
+    # Complejidad: O(1)
+    def create(self) -> ReportBuilder:
+        builder = ReportBuilder(self._width)
+        builder.metadata("Generado", datetime.now().strftime(DATETIME_FORMAT))
+        return builder

@@ -6,6 +6,7 @@ Arquitectura por capas: ui -> services -> domain -> core.
 
 from __future__ import annotations
 
+from builders.report_builder import ReportBuilderFactory
 from builders.report_director import (
     SectionA,
     SectionB,
@@ -28,19 +29,18 @@ from ui.input_reader import ConsoleInputReader, Reader
 from ui.menu import CommandFactory, Menu
 
 
-# Complejidad: O(n)
-def build_summary_action(report_service: ReportService, status_service: SystemStatusService):
+# Complejidad: O(1)
+def build_summary_action(status_service: SystemStatusService):
     # Complejidad: O(n)
     def action(renderer: Renderer, reader: Reader) -> None:
-        pairs = status_service.summary_pairs()
         renderer.clear()
-        renderer.render_lines(report_service.generate_summary(pairs))
+        renderer.render_lines(status_service.summary_report())
         reader.wait_enter("Presione Enter para salir...")
 
     return action
 
 
-# Complejidad: O(n)
+# Complejidad: O(1)
 def build_application() -> Menu:
     renderer = ConsoleRenderer(CONTENT_WIDTH)
     reader = ConsoleInputReader(renderer)
@@ -48,26 +48,33 @@ def build_application() -> Menu:
     code_validator = NotEmptyValidator("codigo")
     name_validator = NotEmptyValidator("nombre")
     description_validator = NotEmptyValidator("descripcion")
+    responsible_validator = NotEmptyValidator("responsable")
     date_validator = DateValidator("fecha", DATE_FORMAT)
     task_id_validator = NotEmptyValidator("id de tarea")
     title_validator = NotEmptyValidator("titulo")
+    priority_validator = NotEmptyValidator("prioridad")
     estimation_validator = PositiveNumberValidator("estimacion")
 
     project_factory = ProjectFactory(
-        code_validator, name_validator, description_validator, date_validator
+        code_validator,
+        name_validator,
+        description_validator,
+        responsible_validator,
+        date_validator,
     )
     task_factory = TaskFactory(
         task_id_validator,
         title_validator,
         description_validator,
+        priority_validator,
         estimation_validator,
-        date_validator,
     )
 
     projects = Deque()
     project_service = ProjectService(projects, project_factory)
     task_service = TaskService(project_service, task_factory)
-    status_service = SystemStatusService(project_service)
+    builder_factory = ReportBuilderFactory(CONTENT_WIDTH)
+    status_service = SystemStatusService(project_service, builder_factory)
 
     sections = [
         SectionA(),
@@ -77,7 +84,7 @@ def build_application() -> Menu:
         SectionE(),
         SectionF(),
     ]
-    report_service = ReportService(project_service, sections)
+    report_service = ReportService(project_service, sections, builder_factory)
 
     command_factory = CommandFactory(
         project_service,
@@ -88,7 +95,7 @@ def build_application() -> Menu:
         task_factory,
     )
     commands = command_factory.build()
-    summary_action = build_summary_action(report_service, status_service)
+    summary_action = build_summary_action(status_service)
     return Menu(commands, renderer, reader, summary_action)
 
 

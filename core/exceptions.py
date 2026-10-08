@@ -1,9 +1,5 @@
-"""Excepciones controladas del dominio Planexa."""
-
 
 class PlanexaError(Exception):
-    """Excepcion base controlada del sistema."""
-
     # Complejidad: O(1)
     def __init__(self, message: str) -> None:
         super().__init__(message)

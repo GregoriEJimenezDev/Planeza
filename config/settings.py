@@ -1,11 +1,10 @@
-"""Constantes globales del sistema Planexa."""
-
 CONTENT_WIDTH = 80
 TERMINAL_FALLBACK = (100, 30)
 DATE_FORMAT = "%Y-%m-%d"
 DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 SYSTEM_NAME = "Planexa"
 FOOTER_TEXT = "Fin del reporte - Planexa"
+TOTALS_LABEL = "Total de registros"
 
 KIND_OK = "OK"
 KIND_ERROR = "ERROR"

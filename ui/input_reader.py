@@ -1,5 +1,3 @@
-"""Lectura de consola validada, con mascara de fecha interactiva."""
-
 from __future__ import annotations
 
 import sys
@@ -18,8 +16,6 @@ from ui.console_renderer import Renderer
 
 
 class Reader(ABC):
-    """Interfaz de entrada validada."""
-
     # Complejidad: O(n)
     @abstractmethod
     def read_validated(self, label: str, validator: Validator) -> object:
@@ -47,8 +43,6 @@ class Reader(ABC):
 
 
 class ConsoleInputReader(Reader):
-    """Lectura de consola con repeticion ante datos invalidos."""
-
     # Complejidad: O(1)
     def __init__(self, renderer: Renderer) -> None:
         self._renderer = renderer

@@ -1,5 +1,3 @@
-"""Abstraccion Command de una opcion del menu."""
-
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
@@ -9,8 +7,6 @@ from ui.input_reader import Reader
 
 
 class Command(ABC):
-    """Interfaz de una opcion del menu."""
-
     # Complejidad: O(1)
     def __init__(self, key: str, label: str) -> None:
         self.key = key

@@ -1,5 +1,3 @@
-"""Renderer de consola centrado con ancho de contenido fijo."""
-
 from __future__ import annotations
 
 import os
@@ -11,8 +9,6 @@ from config.settings import CONTENT_WIDTH, MESSAGE_PREFIXES, TERMINAL_FALLBACK
 
 
 class Renderer(ABC):
-    """Interfaz de salida visual."""
-
     # Complejidad: O(1)
     @abstractmethod
     def clear(self) -> None:
@@ -55,13 +51,14 @@ class Renderer(ABC):
 
 
 class ConsoleRenderer(Renderer):
-    """Salida de consola centrada con ancho de contenido fijo."""
-
     # Complejidad: O(1)
     def __init__(self, content_width: int = CONTENT_WIDTH) -> None:
         self._content_width = content_width
+
+    # Complejidad: O(1)
+    def _margin(self) -> int:
         columns = shutil.get_terminal_size(fallback=TERMINAL_FALLBACK).columns
-        self._margin = max(0, (columns - content_width) // 2)
+        return max(0, (columns - self._content_width) // 2)
 
     # Complejidad: O(1)
     def clear(self) -> None:
@@ -69,7 +66,7 @@ class ConsoleRenderer(Renderer):
 
     # Complejidad: O(n)
     def _emit(self, line: str) -> None:
-        sys.stdout.write(" " * self._margin + line + "\n")
+        sys.stdout.write(" " * self._margin() + line + "\n")
 
     # Complejidad: O(n)
     def title(self, text: str) -> None:
@@ -128,5 +125,5 @@ class ConsoleRenderer(Renderer):
 
     # Complejidad: O(n)
     def prompt(self, label: str) -> None:
-        sys.stdout.write(" " * self._margin + label)
+        sys.stdout.write(" " * self._margin() + label)
         sys.stdout.flush()

@@ -14,8 +14,6 @@ from core.exceptions import ValidationError
 
 
 class Validator(ABC):
-    """Interfaz minima de validacion de un campo."""
-
     # Complejidad: O(1)
     @abstractmethod
     def validate(self, value: object) -> object:
@@ -23,8 +21,6 @@ class Validator(ABC):
 
 
 class NotEmptyValidator(Validator):
-    """Valida que un texto no este vacio."""
-
     # Complejidad: O(1)
     def __init__(self, field_name: str) -> None:
         self._field_name = field_name
@@ -38,8 +34,6 @@ class NotEmptyValidator(Validator):
 
 
 class PositiveNumberValidator(Validator):
-    """Valida que un valor sea numerico y mayor que cero."""
-
     # Complejidad: O(1)
     def __init__(self, field_name: str) -> None:
         self._field_name = field_name
@@ -56,8 +50,6 @@ class PositiveNumberValidator(Validator):
 
 
 class DateValidator(Validator):
-    """Valida que un texto sea una fecha con formato definido."""
-
     # Complejidad: O(1)
     def __init__(self, field_name: str, date_format: str = DATE_FORMAT) -> None:
         self._field_name = field_name

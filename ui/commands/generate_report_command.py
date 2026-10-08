@@ -1,5 +1,3 @@
-"""Opcion 10: generar reportes A-F."""
-
 from __future__ import annotations
 
 from core.exceptions import EntityNotFoundError
@@ -13,8 +11,6 @@ from ui.input_reader import Reader
 
 
 class GenerateReportCommand(Command):
-    """Opcion 10: generar reportes A-F."""
-
     # Complejidad: O(1)
     def __init__(
         self,
@@ -22,7 +18,7 @@ class GenerateReportCommand(Command):
         project_service: ProjectService,
         project_factory: ProjectFactory,
     ) -> None:
-        super().__init__("10", "Generar reportes (A-F)")
+        super().__init__("10", "Generar reportes")
         self._report_service = report_service
         self._project_service = project_service
         self._project_factory = project_factory
@@ -30,14 +26,14 @@ class GenerateReportCommand(Command):
     # Complejidad: O(n)
     def execute(self, renderer: Renderer, reader: Reader) -> bool:
         renderer.clear()
-        renderer.title("Generar Reporte")
+        renderer.title("Generar reportes")
         options = [
-            "A) Inventario de proyectos (front -> rear)",
-            "B) Inventario de proyectos (rear -> front)",
-            "C) Tareas pendientes de un proyecto",
-            "D) Historial de un proyecto",
-            "E) Resumen de carga por proyecto",
-            "F) Proyectos sin tareas pendientes",
+            "A) Total de proyectos registrados",
+            "B) Tareas de un proyecto (front -> rear)",
+            "C) Tareas de un proyecto (rear -> front)",
+            "D) Proyecto con más tareas",
+            "E) Total de tareas de todos los proyectos",
+            "F) Historial de tareas procesadas de un proyecto",
         ]
         renderer.render_lines([renderer.center(option) for option in options])
         renderer.separator()
@@ -51,7 +47,7 @@ class GenerateReportCommand(Command):
 
     # Complejidad: O(n)
     def _resolve_project(self, identifier: str, reader: Reader) -> Project | None:
-        if identifier not in ("C", "D"):
+        if identifier not in ("B", "C", "F"):
             return None
         code = reader.read_validated(
             "Codigo del proyecto", self._project_factory.code_validator

@@ -1,5 +1,3 @@
-"""Deque propio con nodos doblemente enlazados."""
-
 from __future__ import annotations
 
 from core.deque_node import DequeNode
@@ -7,8 +5,6 @@ from core.exceptions import EmptyDequeError
 
 
 class Deque:
-    """Deque con nodos doblemente enlazados, referencias front y rear."""
-
     # Complejidad: O(1)
     def __init__(self) -> None:
         self._front: DequeNode | None = None

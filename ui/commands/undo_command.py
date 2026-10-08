@@ -1,5 +1,3 @@
-"""Opcion 8: deshacer la ultima tarea procesada."""
-
 from __future__ import annotations
 
 from config.settings import KIND_OK
@@ -11,18 +9,16 @@ from ui.input_reader import Reader
 
 
 class UndoCommand(Command):
-    """Opcion 8: deshacer la ultima tarea procesada."""
-
     # Complejidad: O(1)
     def __init__(self, task_service: TaskService, project_factory: ProjectFactory) -> None:
-        super().__init__("8", "Deshacer ultima procesada")
+        super().__init__("8", "Deshacer última tarea procesada")
         self._task_service = task_service
         self._project_factory = project_factory
 
     # Complejidad: O(n)
     def execute(self, renderer: Renderer, reader: Reader) -> bool:
         renderer.clear()
-        renderer.title("Deshacer Ultima Procesada")
+        renderer.title("Deshacer última tarea procesada")
         code = reader.read_validated(
             "Codigo del proyecto", self._project_factory.code_validator
         )

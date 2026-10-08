@@ -1,5 +1,3 @@
-"""Menu de aplicacion y registro de comandos."""
-
 from __future__ import annotations
 
 from config.settings import KIND_ERROR, KIND_WARN
@@ -62,14 +60,12 @@ class CommandFactory:
             GenerateReportCommand(
                 self._report_service, self._project_service, self._project_factory
             ),
-            SystemStatusCommand(self._report_service, self._status_service),
-            ExitCommand(self._report_service, self._status_service),
+            SystemStatusCommand(self._status_service),
+            ExitCommand(self._status_service),
         ]
 
 
 class Menu:
-    """Bucle de aplicacion y despacho de comandos."""
-
     # Complejidad: O(1)
     def __init__(
         self,

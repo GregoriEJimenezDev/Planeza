@@ -1,5 +1,3 @@
-"""Opcion 6: procesar la tarea del frente."""
-
 from __future__ import annotations
 
 from config.settings import KIND_OK
@@ -11,18 +9,16 @@ from ui.input_reader import Reader
 
 
 class ProcessFrontCommand(Command):
-    """Opcion 6: procesar la tarea del frente."""
-
     # Complejidad: O(1)
     def __init__(self, task_service: TaskService, project_factory: ProjectFactory) -> None:
-        super().__init__("6", "Procesar por el frente")
+        super().__init__("6", "Procesar tarea por el frente")
         self._task_service = task_service
         self._project_factory = project_factory
 
     # Complejidad: O(n)
     def execute(self, renderer: Renderer, reader: Reader) -> bool:
         renderer.clear()
-        renderer.title("Procesar por el Frente")
+        renderer.title("Procesar tarea por el frente")
         code = reader.read_validated(
             "Codigo del proyecto", self._project_factory.code_validator
         )

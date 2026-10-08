@@ -1,5 +1,3 @@
-"""Opcion 3: editar proyecto (el codigo no se edita)."""
-
 from __future__ import annotations
 
 from config.settings import KIND_OK
@@ -11,8 +9,6 @@ from ui.input_reader import Reader
 
 
 class EditProjectCommand(Command):
-    """Opcion 3: editar proyecto (el codigo no se edita)."""
-
     # Complejidad: O(1)
     def __init__(self, project_service: ProjectService, factory: ProjectFactory) -> None:
         super().__init__("3", "Editar proyecto")
@@ -22,14 +18,22 @@ class EditProjectCommand(Command):
     # Complejidad: O(n)
     def execute(self, renderer: Renderer, reader: Reader) -> bool:
         renderer.clear()
-        renderer.title("Editar Proyecto")
+        renderer.title("Editar proyecto")
         code = reader.read_validated("Codigo del proyecto", self._factory.code_validator)
         project = self._project_service.require(code)
         name = reader.read_validated("Nuevo nombre", self._factory.name_validator)
         description = reader.read_validated(
             "Nueva descripcion", self._factory.description_validator
         )
-        self._project_service.update(code, name, description)
+        responsible = reader.read_validated(
+            "Nuevo responsable", self._factory.responsible_validator
+        )
+        start_date = self._factory.date_validator.validate(
+            reader.read_date("Nueva fecha de inicio (DD-MM-AAAA)")
+        )
+        self._project_service.update(
+            code, name, description, responsible, start_date
+        )
         renderer.message(KIND_OK, f"Proyecto '{project.code}' actualizado correctamente.")
         reader.wait_enter("Presione Enter para continuar...")
         return True

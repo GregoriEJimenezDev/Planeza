@@ -1,5 +1,3 @@
-"""Servicio de tareas: anadir, procesar front/rear y deshacer."""
-
 from __future__ import annotations
 
 from core.exceptions import DuplicateTaskIdError, EmptyDequeError
@@ -10,8 +8,6 @@ from services.project_service import ProjectService
 
 
 class TaskService:
-    """Operaciones de negocio sobre las tareas de un proyecto."""
-
     # Complejidad: O(1)
     def __init__(self, project_service: ProjectService, factory: TaskFactory) -> None:
         self._project_service = project_service
@@ -35,12 +31,12 @@ class TaskService:
         task_id: str,
         title: str,
         description: str,
+        priority: str,
         estimation: str,
-        due_date: str,
     ) -> Task:
         project = self._project_service.require(code)
         self._ensure_unique_id(project, task_id)
-        task = self._factory.create(task_id, title, description, estimation, due_date)
+        task = self._factory.create(task_id, title, description, priority, estimation)
         project.tasks.insert_rear(task)
         return task
 
