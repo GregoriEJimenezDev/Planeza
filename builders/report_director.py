@@ -3,6 +3,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
+from config.settings import EMPTY_RECORDS
 from core.exceptions import ValidationError
 from domain.project import Project
 
@@ -53,7 +54,7 @@ class SectionA(ReportSection):
         for _ in project_service.iter_projects(False):
             count += 1
         builder.pair("Total de proyectos registrados", count)
-        builder.total_records(1)
+        builder.total_records(count)
 
 
 class SectionB(ReportSection):
@@ -125,7 +126,7 @@ class SectionD(ReportSection):
         builder.header(self.title, self.identifier)
         most = project_service.most_tasks_project()
         if most is None:
-            builder.note("Sin registros")
+            builder.note(EMPTY_RECORDS)
             builder.total_records(0)
             return
         builder.pair(
@@ -150,7 +151,7 @@ class SectionE(ReportSection):
         builder.header(self.title, self.identifier)
         total = project_service.total_pending_tasks()
         builder.pair("Total de tareas de todos los proyectos", total)
-        builder.total_records(1)
+        builder.total_records(total)
 
 
 class SectionF(ReportSection):

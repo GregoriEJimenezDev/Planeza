@@ -56,7 +56,7 @@ class CommandFactory:
             ProcessFrontCommand(self._task_service, self._project_factory),
             ProcessRearCommand(self._task_service, self._project_factory),
             UndoCommand(self._task_service, self._project_factory),
-            ListProjectsCommand(self._report_service),
+            ListProjectsCommand(self._report_service, self._project_service),
             GenerateReportCommand(
                 self._report_service, self._project_service, self._project_factory
             ),

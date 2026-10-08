@@ -77,7 +77,7 @@ class ConsoleInputReader(Reader):
                 return raw == "s"
             self._renderer.message(KIND_WARN, "Responda 's' o 'n'.")
 
-    # Complejidad: O(n)
+    # Complejidad: O(1)
     def _format_date_mask(self, digits: str) -> str:
         text = digits[0:2]
         if len(digits) >= 2:

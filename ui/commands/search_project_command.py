@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from config.settings import EMPTY_TASKS_PENDING, EMPTY_TASKS_PROCESSED
 from core.deque import Deque
 from factories.project_factory import ProjectFactory
 from services.project_service import ProjectService
@@ -28,17 +29,26 @@ class SearchProjectCommand(Command):
         renderer.field("Responsable", project.responsible)
         renderer.field("Fecha de inicio", project.start_date.isoformat())
         renderer.field("Cantidad de tareas", project.pending_count)
-        renderer.field("Primera tarea pendiente", self._task_label(project.tasks, True))
-        renderer.field("Ultima tarea pendiente", self._task_label(project.tasks, False))
-        renderer.field("Ultima tarea procesada", self._task_label(project.history, False))
+        renderer.field(
+            "Primera tarea pendiente",
+            self._task_label(project.tasks, True, EMPTY_TASKS_PENDING),
+        )
+        renderer.field(
+            "Ultima tarea pendiente",
+            self._task_label(project.tasks, False, EMPTY_TASKS_PENDING),
+        )
+        renderer.field(
+            "Ultima tarea procesada",
+            self._task_label(project.history, False, EMPTY_TASKS_PROCESSED),
+        )
         renderer.field("Tareas procesadas", project.processed_count)
         renderer.separator()
         reader.wait_enter("Presione Enter para continuar...")
         return True
 
     # Complejidad: O(1)
-    def _task_label(self, tasks: Deque, use_front: bool) -> str:
+    def _task_label(self, tasks: Deque, use_front: bool, empty_text: str) -> str:
         if tasks.is_empty():
-            return "Sin tareas"
+            return empty_text
         task = tasks.get_front() if use_front else tasks.get_rear()
         return f"{task.task_id} - {task.title}"

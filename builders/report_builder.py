@@ -6,6 +6,7 @@ from datetime import datetime
 from config.settings import (
     CONTENT_WIDTH,
     DATETIME_FORMAT,
+    EMPTY_RECORDS,
     FOOTER_TEXT,
     SYSTEM_NAME,
     TOTALS_LABEL,
@@ -69,7 +70,7 @@ class ReportBuilder(AbstractReportBuilder):
         self._columns: list[tuple[str, int, str]] = []
         self._rows: list[list[object]] = []
         self._pairs: list[tuple[str, object]] = []
-        self._note = "Sin registros"
+        self._note = EMPTY_RECORDS
         self._totals = ""
         self._footer = FOOTER_TEXT
 

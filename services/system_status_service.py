@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from config.settings import EMPTY_PROJECTS
 from services.project_service import ProjectService
 
 if TYPE_CHECKING:
@@ -19,13 +20,13 @@ class SystemStatusService:
     # Complejidad: O(1)
     def _label(self, project) -> str:
         if project is None:
-            return "(no hay)"
+            return EMPTY_PROJECTS
         return f"{project.code} - {project.name}"
 
     # Complejidad: O(1)
     def _most_label(self, project) -> str:
         if project is None:
-            return "(no hay)"
+            return EMPTY_PROJECTS
         return f"{project.code} - {project.name} ({project.tasks.size})"
 
     # Complejidad: O(n)
